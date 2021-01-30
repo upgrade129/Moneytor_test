@@ -1,0 +1,19 @@
+n = int(input("How many terms? "))
+
+n1, n2 = 0, 1
+count = 0
+
+if 1<=n<=1000000:
+    if n == 1:
+        print("Fibonacci sequence",n,":")
+        print(n1)
+    else:
+        print("Fibonacci sequence",n,":")
+        while count < n:
+            print(n1)
+            nth = n1 + n2
+            n1 = n2
+            n2 = nth
+            count += 1
+else:
+    print("Enter a positive number in the range 1<=n<=1000000")

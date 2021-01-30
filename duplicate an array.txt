@@ -1,0 +1,8 @@
+n = int(input("Enter number of elements : ")) 
+  
+res=[] 
+for i in range(0, n): 
+    number = int(input()) 
+    if number not in res: 
+        res.append(number) 
+print("list after duplicating the intgers :",res)
