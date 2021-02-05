@@ -1,0 +1,7 @@
+The routes given for the following Api are :
+
+1.https://localhost/9000/api/server/-- POST - To create a server
+2.https://localhost/9000/api/server/-- GET - To get all the servers
+3.https://localhost/9000/api/server/id-- GET - To find a specific server using the server id
+4.https://localhost/9000/api/server/id -- PUT - To update the server using the specific server id
+5.https://localhost/9000/api/server/id -- DELETE - To delete the server using the specific server id
