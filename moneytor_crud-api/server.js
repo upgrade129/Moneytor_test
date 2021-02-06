@@ -1,32 +1,22 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-
-const app = express();
-
-const db = require("./app/models");
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-  });
-
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
-
-app.use(cors(corsOptions));
-
-app.use(bodyParser.json());
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to prem's app." });
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json())
+ 
+const db = require('./app/config/db.config.js');
+  
+// force: true will drop the table if it already exists
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync with { force: true }');
 });
-
-
-require("./app/routes/server.routes")(app);
-
-const PORT = process.env.PORT || 9000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+ 
+require('./app/route/server.route.js')(app);
+ 
+// Create a Server
+var server = app.listen(8081, function () {
+ 
+  var host = server.address().address
+  var port = server.address().port
+ 
+  console.log("App listening at http://%s:%s", host, port)
+})

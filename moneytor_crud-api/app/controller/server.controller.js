@@ -1,134 +1,56 @@
-const db = require("../models");
-const server = db.server;
-const Op = db.Sequelize.Op;
-
-exports.create = (req, res) => {
-  if (!req.body.ServerID) {
-      res.status(400).send({
-      message: "ID can not be empty!"
-    });
-    return;
-  }
-
-  const server = {
-    ServerID: req.body.ServerID,
+const db = require('../config/db.config.js');
+const Server = db.servers;
+ 
+// Post a Customer
+exports.create = (req, res) => {  
+  // Save to MySQL database
+  Server.create({  
     RAM: req.body.RAM,
     CPU: req.body.CPU,
     OperatingSystem: req.body.OperatingSystem,
     Graphics: req.body.Graphics,
-    Storage: req.body.Storage,
-  };
-
-  server.create(server)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the server."
-      });
-    });
-  
+    Storage: req.body.Storage
+  }).then(server => {    
+    // Send created customer to client
+    res.send(server);
+  });
 };
-
+ 
+// FETCH all Customers
 exports.findAll = (req, res) => {
-    const id = req.query.id;
-  var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
-
-  server.findAll({ where: condition })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving servers."
-      });
-    });
+  Server.findAll().then(servers => {
+    // Send all customers to Client
+    res.send(servers);
+  });
 };
-  
-
-
-exports.findOne = (req, res) => {
-    const id = req.params.id;
-
-    Tutorial.findByPk(id)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error retrieving Tutorial with id=" + id
-        });
-      });
-  
+ 
+// Find a Customer by Id
+exports.findById = (req, res) => {  
+  Server.findByPk(req.params.serverId).then(server => {
+    res.send(server);
+  })
 };
-
+ 
+// Update a Customer
 exports.update = (req, res) => {
-    const id = req.params.id;
-
-  server.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
-      });
-    });
-  
+  const id = req.params.serverId;
+  Server.update( {RAM: req.body.RAM,
+                  CPU: req.body.CPU,
+                  OperatingSystem: req.body.OperatingSystem,
+                  Graphics: req.body.Graphics,
+                  Storage: req.body.Storage }, 
+           { where: {id: req.params.customerId} }
+           ).then(() => {
+           res.status(200).send("updated successfully a server with id = " + id);
+           });
 };
-
+ 
+// Delete a Customer by Id
 exports.delete = (req, res) => {
-    const id = req.params.id;
-
-  server.destroy({
+  const id = req.params.serverId;
+  Server.destroy({
     where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
-      });
-    });
-  
+  }).then(() => {
+    res.status(200).send('deleted successfully a server with id = ' + id);
+  });
 };
-
-exports.deleteAll = (req, res) => {
-    server.destroy({
-        where: {},
-        truncate: false
-      })
-        .then(nums => {
-          res.send({ message: `${nums} Tutorials were deleted successfully!` });
-        })
-        .catch(err => {
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while removing all tutorials."
-          });
-        });
-  
-};
-

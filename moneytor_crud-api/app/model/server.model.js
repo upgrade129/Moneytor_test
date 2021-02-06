@@ -1,13 +1,10 @@
 module.exports = (sequelize, Sequelize) => {
-    const server = sequelize.define("server", {
-      ServerID: {
-        type: Sequelize.INTEGER, 
-      },
+    const Server = sequelize.define('server', {
       RAM: {
-        type: Sequelize.INTEGER
+      type: Sequelize.STRING
       },
       CPU: {
-        type: Sequelize.INTEGER
+      type: Sequelize.STRING
       },
       OperatingSystem: {
         type: Sequelize.STRING
@@ -16,10 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       Storage: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
-      
     });
-  
-    return server;
-  };
+    
+    return Server;
+  }
